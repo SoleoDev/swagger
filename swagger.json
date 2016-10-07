@@ -1,0 +1,706 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "2.0",
+    "title" : "Soleo Local Search API V2",
+    "description" : "The Soleo Local Search API empowers developers to create amazing local mobile search apps to connect people with businesses and monetize with pay-per-call revenue.",
+    "license" : {
+      "name" : "SOLEO Terms of Use",
+      "url" : "https://developer.soleo.com/terms_of_use"
+    }
+  },
+  "host" : "trialapi.soleo.com",
+  "basePath" : "/",
+  "securityDefinitions" : {
+    "APIKey" : {
+      "type" : "apiKey",
+      "description" : "API Key from developer.soleo.com",
+      "name" : "APIKey",
+      "in" : "query",
+      "x-testValue" : ""
+    }
+  },
+  "schemes" : [ "https" ],
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/category/{level}" : {
+      "get" : {
+        "description" : "The Category endpoint allows the developer to get a list of the top level categories used by Soleo (level 1, 2 or 3)",
+        "tags" : [ "Category Information" ],
+        "operationId" : "Get_Category_",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "level",
+          "in" : "path",
+          "required" : true,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "Number of category levels to return (1, 2 or 3)"
+        }, {
+          "name" : "APIKey",
+          "in" : "query",
+          "required" : true,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "API Key from developer.soleo.com"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "schema" : {
+              "$ref" : "#/definitions/Categories"
+            }
+          },
+          "400" : {
+            "description" : "Bad request (API)"
+          },
+          "403" : {
+            "description" : "Inactive/Unknown Key (Proxy)"
+          },
+          "410" : {
+            "description" : "Gone (API)"
+          },
+          "504" : {
+            "description" : "Gateway Timeout (proxy)"
+          },
+          "default" : {
+            "description" : "The server experienced an internal issue and could not process the API request."
+          }
+        },
+        "security" : [ {
+          "APIKey" : [ ]
+        } ],
+        "x-unitTests" : [ ],
+        "x-operation-settings" : {
+          "CollectParameters" : false,
+          "AllowDynamicQueryParameters" : false,
+          "AllowDynamicFormParameters" : false,
+          "IsMultiContentStreaming" : false
+        }
+      }
+    },
+    "/businesses" : {
+      "get" : {
+        "description" : "The Businesses endpoint searches business listings, returning both organic and sponsored business listings (ads) in the same result along with callbacks for monetizeable events.  Searches run against the Soleo Intent Engine, returning relevant search results with highly-accurate data based on geographic location (geocode, city/state, or postal code) and business category or keyword.",
+        "tags" : [ "Business Listings" ],
+        "operationId" : "Get_Businesses_",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "accept",
+          "in" : "header",
+          "required" : false,
+          "x-is-map" : false,
+          "default" : "application/vnd.api.soleo.com-v2+json",
+          "type" : "string",
+          "description" : "Identifies the requested API version and response format. (Acceptable values are: \"application/vnd.api.soleo.com-v1+json\", \"application/vnd.api.soleo.com-v1+xml\"),\"application/vnd.api.soleo.com-v2+json\", \"application/vnd.api.soleo.com-v2+xml\""
+        }, {
+          "name" : "user-Agent",
+          "in" : "header",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "This header provides information about the user agent originating the request."
+        }, {
+          "name" : "FreeFormQuery",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "Free-form text used to perform a Natural Language search for a business. NOTE:\tIf this parameter is specified, the search ignores the data specified in Name, Category, and Keyword."
+        }, {
+          "name" : "Keyword",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "A term to search against business names and categories.  One of Keyword, Category, or Name parameters is required."
+        }, {
+          "name" : "Category",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "The category that defines (or relates to) the commercial offering of a business.  If Category and Keyword parameters are both provided, the Category parameter takes precedence.  One of Keyword, Category, or Name parameters is required."
+        }, {
+          "name" : "Name",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "The name of a business.  If Name and Keyword parameters are both provided, the Name parameter takes precedence.  One of Keyword, Category, or Name parameters is required."
+        }, {
+          "name" : "Latitude",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "The latitude of the search point.  Valid value range [0.000000, 90.000000].  If used, you must also provide a longitude to form a complete geocode for the search point.  Search points are limited to the continental United States, Alaska, and Hawaii."
+        }, {
+          "name" : "Longitude",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "The longitude of the search point.  Valid value range [-180.000000, 0.000000].  If used, you must also provide a latitude to form a complete geocode for the search point.  Search points are limited to the continental United States, Alaska, and Hawaii."
+        }, {
+          "name" : "Radius",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "The radius (in miles) which forms a circular fence around the search point.  Valid value range [0.01, 999.99].  If used, you must also provide a search point with a latitude and longitude (geocode) pair."
+        }, {
+          "name" : "City",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "The name of the city to use as a search point.  If used, you must also provide a state to form a complete city and state pair."
+        }, {
+          "name" : "State",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "The name of the state to use as a search point.  If used, you must also provide a city to form a complete city and state pair. (Acceptable values are: \"\", \"AL\", \"AK\", \"AZ\", \"AR\", \"CA\", \"CO\", \"CT\", \"DE\", \"DC\", \"FL\", \"GA\", \"HI\", \"ID\", \"IL\", \"IN\", \"IA\", \"KS\", \"KY\", \"LA\", \"ME\", \"MD\", \"MA\", \"MI\", \"MN\", \"MS\", \"MO\", \"MT\", \"NE\", \"NV\", \"NH\", \"NJ\", \"NM\", \"NY\", \"NC\", \"ND\", \"OH\", \"OK\", \"OR\", \"PA\", \"RI\", \"SC\", \"SD\", \"TN\", \"TX\", \"UT\", \"VT\", \"VA\", \"WA\", \"WV\", \"WS\", \"WY\")"
+        }, {
+          "name" : "PostalCode",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "The postal code of a location.  Valid entries are 5-digit postal codes (ex. '14450'), 9-digit postal codes with a dash between the fifth and sixth digits (ex. '14450-4222'), or 9-digit postal codes with no dash (ex. '144504222')."
+        }, {
+          "name" : "OpenOnly",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "default" : "No",
+          "type" : "string",
+          "description" : "If 'yes', only returns businesses that are known to not be closed at the current time. (Acceptable values are: \"\", \"yes\", \"no\")"
+        }, {
+          "name" : "Type",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "Limits the type of businesses that are searched and returned.  Valid values are 'Organic' (to search and return organic business listings), 'Presented' (to search and return sponsored business listings which have impression revenue opportunities), 'Selected' (to search and return sponsored business listings which have selection opportunities), and 'Called' (to search and return sponsored business listings which have pay-per-call revenue opportunities).  Multiple values can be provided as a comma-delimited list (ex. type=Presented,Selected,Called)."
+        }, {
+          "name" : "Sort",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "default" : "value_distance",
+          "type" : "string",
+          "description" : "The sort preference for the results. Valid values are 'value' (sort results by the estimated value, highest to lowest, where estimated value is a function of the monetizable amount in combination with the result relevancy and monetization probability), 'distance' (sort results by proximity to the search point, shortest to furthest), and 'value_distance' (sort results by the estimated value, highest to lowest, then by proximity to the search point, shortest to furthest). (Acceptable values are: \"\", \"value\", \"distance\", \"value_distance\")"
+        }, {
+          "name" : "ReferenceID",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "A unique string or identifier, provided by the developer, used to represent the API transaction."
+        }, {
+          "name" : "SourceID",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "A unique string or identifier, provided by the developer, which represents the end user of the API transaction."
+        }, {
+          "name" : "IPAddress",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "The IP address of the end user."
+        }, {
+          "name" : "ANI",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "type" : "string",
+          "description" : "The end user's phone number."
+        }, {
+          "name" : "MaxSponsoredCount",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "default" : "3",
+          "type" : "string",
+          "description" : "The maximum number of paid businesses that should be returned in the response.  If not specified, the maximum is determined by system configuration (currently 3). This parameter is only valid when using the Sponsored or Businesses endpoints. Organic endpoint request will be rejected if this parameter is provided."
+        }, {
+          "name" : "MaxOrganicCount",
+          "in" : "query",
+          "required" : false,
+          "x-is-map" : false,
+          "default" : "7",
+          "type" : "string",
+          "description" : "The maximum number of organic businesses that should be returned in the response.  If not specified, the maximum is determined by system configuration. This parameter is only valid when using the Businesses or Organic endpoints. Sponsored endpoint requests will be rejected if this parameter is provided."
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "schema" : {
+              "$ref" : "#/definitions/Response"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request (API)"
+          },
+          "403" : {
+            "description" : "Inactive/Unknown Key (Proxy)"
+          },
+          "404" : {
+            "description" : "The API request was made to an invalid resource or endpoint."
+          },
+          "405" : {
+            "description" : "The initial search for businesses was made using an HTTP method other than GET."
+          },
+          "406" : {
+            "description" : "The API request contains an invalid Accept header."
+          },
+          "410" : {
+            "description" : "Gone (API)"
+          },
+          "504" : {
+            "description" : "Gateway Timeout (Proxy)"
+          },
+          "default" : {
+            "description" : "Internal Server Error (API)"
+          }
+        },
+        "security" : [ {
+          "APIKey" : [ ]
+        } ],
+        "x-unitTests" : [ ],
+        "x-operation-settings" : {
+          "CollectParameters" : false,
+          "AllowDynamicQueryParameters" : false,
+          "AllowDynamicFormParameters" : false,
+          "IsMultiContentStreaming" : false
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "CallBack" : {
+      "title" : "CallBack",
+      "type" : "object",
+      "properties" : {
+        "data" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/PresentedData"
+          }
+        },
+        "_links" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Links"
+          }
+        }
+      },
+      "required" : [ "data", "_links" ]
+    },
+    "CostCritera" : {
+      "title" : "CostCritera",
+      "description" : "Cost criteria for a organic listing",
+      "type" : "object",
+      "properties" : {
+        "action" : {
+          "description" : "specifies the actions to which costs apply for this business: ",
+          "type" : "string"
+        },
+        "value" : {
+          "description" : "the fixed amount cost (in dollars) that can be charged if a cost action is performed. ",
+          "type" : "number",
+          "format" : "double"
+        },
+        "validUntil" : {
+          "description" : "specifies the time in UTC (Coordinated Universal Time) format when this business no longer incurs a cost if a cost action is performed. ",
+          "type" : "string",
+          "format" : "date-time"
+        }
+      },
+      "required" : [ "action", "value", "validUntil" ]
+    },
+    "Links" : {
+      "title" : "Links",
+      "description" : "Structure containing a URL link and related information.",
+      "type" : "object",
+      "properties" : {
+        "href" : {
+          "description" : "The full URL of the link.",
+          "type" : "string"
+        },
+        "method" : {
+          "description" : "HTTP method to use for this link (\"GET\" or \"POST\")",
+          "type" : "string"
+        },
+        "rel" : {
+          "description" : "URN of the link (or \"self\" if it is a link back to itself)",
+          "type" : "string"
+        }
+      },
+      "required" : [ "href", "method" ]
+    },
+    "MonetizationCritera" : {
+      "title" : "MonetizationCritera",
+      "description" : "Monetization criteria for the sponsored listing.",
+      "type" : "object",
+      "properties" : {
+        "action" : {
+          "description" : "action specifies the sponsor's desired outcome (or outcomes): ",
+          "type" : "string"
+        },
+        "criteria" : {
+          "description" : " criteria only applies to the \"Called\" action.  It specifies the expected minimum duration of the phone call between the end user and the business, in seconds, that is required for the action to be monetized. ",
+          "type" : "string"
+        },
+        "value" : {
+          "description" : "value is the fixed amount revenue opportunity (in dollars) that can be obtained if the monetization action and criteria are met. ",
+          "type" : "string"
+        },
+        "validUntil" : {
+          "description" : "specifies the time in UTC (Coordinated Universal Time) format when this business is no longer monetizeable. ",
+          "type" : "string",
+          "format" : "date-time"
+        }
+      },
+      "required" : [ "action", "criteria", "value", "validUntil" ]
+    },
+    "PresentedData" : {
+      "title" : "PresentedData",
+      "type" : "object",
+      "properties" : {
+        "action" : {
+          "type" : "string"
+        },
+        "_links" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Links"
+          }
+        }
+      },
+      "required" : [ "action", "_links" ]
+    },
+    "Distance" : {
+      "title" : "Distance",
+      "description" : "distance of business from the search location",
+      "type" : "object",
+      "properties" : {
+        "miles" : {
+          "description" : "distance of business from the search location",
+          "type" : "number",
+          "format" : "double"
+        }
+      }
+    },
+    "Categories" : {
+      "title" : "Categories",
+      "description" : "The will be the 'root' node of a Category callback.  It will hold a Child node which also holds a Child2 node",
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "description" : "The internal ID for the category",
+          "type" : "string"
+        },
+        "text" : {
+          "description" : "Text description of the category",
+          "type" : "string"
+        },
+        "children" : {
+          "description" : "List of child categories of the current category",
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Child"
+          }
+        }
+      },
+      "required" : [ "id", "text", "children" ]
+    },
+    "Child" : {
+      "title" : "Child",
+      "description" : "Subcategories",
+      "type" : "object",
+      "properties" : {
+        "children" : {
+          "description" : "a list of  chlid categories of the current category",
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Child2"
+          }
+        },
+        "id" : {
+          "description" : "The internal ID for the category.",
+          "type" : "string"
+        },
+        "text" : {
+          "description" : "a text description of the category",
+          "type" : "string"
+        }
+      },
+      "required" : [ "children", "id", "text" ]
+    },
+    "Child2" : {
+      "title" : "Child2",
+      "description" : "Subcategories",
+      "type" : "object",
+      "properties" : {
+        "children" : {
+          "description" : "This will always be an empty Array",
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "id" : {
+          "description" : "Id of the current category,",
+          "type" : "string"
+        },
+        "text" : {
+          "description" : "Description of the category,",
+          "type" : "string"
+        }
+      },
+      "required" : [ "children", "id", "text" ]
+    },
+    "Businesses" : {
+      "title" : "Businesses",
+      "description" : "Business Listings",
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "description" : "the name of the business. ",
+          "type" : "string"
+        },
+        "address" : {
+          "description" : "the location of the business expressed as a street address. ",
+          "type" : "string"
+        },
+        "city" : {
+          "description" : "the city in which the business is located. ",
+          "type" : "string"
+        },
+        "state" : {
+          "description" : "the state in which the business is located. ",
+          "type" : "string"
+        },
+        "zip" : {
+          "description" : "the postal code in which the business is located.  Postal codes are expressed as either 5 (ex. 14618) or 9 digits (ex. 146185513 or 14618-5513).  Postal codes with 9 digits may contain a delimiter (usually a hyphen) between the 5th and 6th digits (ex. 14618-5513). ",
+          "type" : "string"
+        },
+        "latitude" : {
+          "description" : "the vertical component of the geocode location of a business.  latitude is specified in decimal degrees with values between -90.0 and 90.0, with no more than 6 decimal places. ",
+          "type" : "number",
+          "format" : "double"
+        },
+        "longitude" : {
+          "description" : "the horizontal component of the geocode location of a business.  longitude is specified in decimal degrees with values between - 180.0 and 0, with no more than 6 decimal places. ",
+          "type" : "number",
+          "format" : "double"
+        },
+        "type" : {
+          "description" : " type specifies that the business is one of the following:      \"Organic\": An organic business     \"Sponsored\": A sponsored business",
+          "type" : "string"
+        },
+        "monetizationCritera" : {
+          "description" : "monetizationCriteria specifies the revenue generation opportunity for a business along with what is needed to generate that revenue. ",
+          "$ref" : "#/definitions/MonetizationCritera"
+        },
+        "costCritera" : {
+          "description" : "costCriteria specifies any costs associated with specific actions for this business. ",
+          "$ref" : "#/definitions/CostCritera"
+        },
+        "_links" : {
+          "description" : "The _links section for each business is used to provide a callback URL to begin the monetization sequence. ",
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Links"
+          }
+        },
+        "distance" : {
+          "description" : "The distance in miles from the search location to the business.",
+          "$ref" : "#/definitions/Distance"
+        }
+      },
+      "required" : [ "name", "type", "monetizationCritera", "costCritera", "_links" ]
+    },
+    "ResultsCount" : {
+      "title" : "ResultsCount",
+      "description" : "Count of results by type.",
+      "type" : "object",
+      "properties" : {
+        "sponsored" : {
+          "description" : "Number of sponsered search results (Ads)",
+          "type" : "integer",
+          "default" : 0,
+          "format" : "int32"
+        },
+        "organic" : {
+          "description" : "Number of organic search results (listings)",
+          "type" : "integer",
+          "default" : 0,
+          "format" : "int32"
+        }
+      },
+      "required" : [ "sponsored", "organic" ]
+    },
+    "Summary" : {
+      "title" : "Summary",
+      "description" : "Summary of the search results.",
+      "type" : "object",
+      "properties" : {
+        "resultsCount" : {
+          "description" : "indicates the number of businesses returned in the response by type",
+          "$ref" : "#/definitions/ResultsCount"
+        },
+        "validUntil" : {
+          "description" : "specifies the time in UTC (Coordinated Universal Time) format when the session will expire. ",
+          "type" : "string",
+          "format" : "date-time"
+        }
+      },
+      "required" : [ "resultsCount", "validUntil" ]
+    },
+    "Response" : {
+      "title" : "Response",
+      "description" : "Query Response",
+      "type" : "object",
+      "properties" : {
+        "summary" : {
+          "description" : "summary counts of the results returned",
+          "$ref" : "#/definitions/Summary"
+        },
+        "businesses" : {
+          "description" : "contains data on 0 or more business that are returned in the search results. ",
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Businesses"
+          }
+        },
+        "_links" : {
+          "description" : "The top-level _links section contains a self section that is used to provide a self-referencing URL for the inital API request. ",
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Links"
+          }
+        }
+      },
+      "required" : [ "summary", "businesses", "_links" ]
+    },
+    "BusinessDetails" : {
+      "title" : "BusinessDetails",
+      "description" : "Details about the business",
+      "type" : "object",
+      "properties" : {
+        "isOpen" : {
+          "description" : "\"Yes\" means the business is currently known to be open.",
+          "type" : "string"
+        },
+        "hours" : {
+          "description" : "The business's open hours in a standard format.",
+          "type" : "string"
+        },
+        "displayHours" : {
+          "description" : "The business's open hours in a directly displayable format.",
+          "type" : "string"
+        },
+        "timeZone" : {
+          "description" : "The time zone for the open hours.",
+          "type" : "string"
+        },
+        "descriptors" : {
+          "description" : "A list of descriptive text elements about the bsuiness.",
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      },
+      "required" : [ "descriptors" ]
+    },
+    "SelectedWithDetailsCall" : {
+      "title" : "SelectedWithDetailsCall",
+      "type" : "object",
+      "properties" : {
+        "data" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/SelectedWithD_Info"
+          }
+        },
+        "_links" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Links"
+          }
+        }
+      },
+      "required" : [ "data", "_links" ]
+    },
+    "SelectedWithD_Info" : {
+      "title" : "SelectedWithD_Info",
+      "type" : "object",
+      "properties" : {
+        "details" : {
+          "$ref" : "#/definitions/BusinessDetails"
+        },
+        "_links" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Links"
+          }
+        }
+      },
+      "required" : [ "details", "_links" ]
+    },
+    "CallCompletionCallback" : {
+      "title" : "CallCompletionCallback",
+      "type" : "object",
+      "properties" : {
+        "data" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CallCompletionData"
+          }
+        },
+        "_links" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Links"
+          }
+        }
+      },
+      "required" : [ "data", "_links" ]
+    },
+    "CallCompletionData" : {
+      "title" : "CallCompletionData",
+      "type" : "object",
+      "properties" : {
+        "action" : {
+          "type" : "string"
+        },
+        "displayPhoneNumber" : {
+          "type" : "string"
+        },
+        "completionPhoneNumber" : {
+          "type" : "string"
+        },
+        "validUntil" : {
+          "type" : "string"
+        },
+        "_links" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Links"
+          }
+        }
+      },
+      "required" : [ "action", "displayPhoneNumber", "completionPhoneNumber", "validUntil", "_links" ]
+    }
+  }
+}
